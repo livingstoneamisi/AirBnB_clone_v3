@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+"""Flask inatance implementation."""
 from flask import Flask
 from models import storage
 from api.v1.views import app_views
@@ -16,7 +18,6 @@ if __name__ == "__main__":
     from os import getenv
     host = getenv('HBNB_API_HOST')
     port = getenv('HBNB_API_PORT')
-    
     if not host:
         host = '0.0.0.0'
     if not port:
