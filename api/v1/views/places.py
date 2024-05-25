@@ -206,4 +206,3 @@ def search():
     ]
 
     return jsonify(result)
-
