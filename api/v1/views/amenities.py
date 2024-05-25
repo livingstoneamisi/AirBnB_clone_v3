@@ -16,7 +16,7 @@ def amenity_get_all():
     am_list = []
     am_obj = storage.all("Amenity")
     for obj in am_obj.values():
-        am_list.append(obj.to_json())
+        am_list.append(obj.to_dict())
 
     return jsonify(am_list)
 
@@ -35,7 +35,7 @@ def amenity_create():
 
     new_am = Amenity(**am_json)
     new_am.save()
-    resp = jsonify(new_am.to_json())
+    resp = jsonify(new_am.to_dict())
     resp.status_code = 201
 
     return resp
@@ -55,7 +55,7 @@ def amenity_by_id(amenity_id):
     if fetched_obj is None:
         abort(404)
 
-    return jsonify(fetched_obj.to_json())
+    return jsonify(fetched_obj.to_dict())
 
 
 @app_views.route("/amenities/<amenity_id>",  methods=["PUT"],
@@ -76,7 +76,7 @@ def amenity_put(amenity_id):
         if key not in ["id", "created_at", "updated_at"]:
             setattr(fetched_obj, key, val)
     fetched_obj.save()
-    return jsonify(fetched_obj.to_json())
+    return jsonify(fetched_obj.to_dict())
 
 
 @app_views.route("/amenities/<amenity_id>",  methods=["DELETE"],
