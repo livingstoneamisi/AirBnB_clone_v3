@@ -17,7 +17,7 @@ def teardown(exc):
 def error(exc):
     return({
             "error": "Not found"
-            })
+            }, 404)
 
 
 if __name__ == "__main__":
