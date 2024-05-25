@@ -32,12 +32,12 @@ def place_create(city_id):
     place_json = request.get_json(silent=True)
     if place_json is None:
         abort(400, 'Not a JSON')
-    if not storage.get("User", place_json["user_id"]):
-        abort(404)
     if not storage.get("City", city_id):
         abort(404)
     if "user_id" not in place_json:
         abort(400, 'Missing user_id')
+    if not storage.get("User", place_json["user_id"]):
+        abort(404)
     if "name" not in place_json:
         abort(400, 'Missing name')
 
@@ -92,7 +92,7 @@ def place_put(place_id):
 
     fetched_obj.save()
 
-    return jsonify(fetched_obj.to_dict())
+    return jsonify(fetched_obj.to_dict()), 200
 
 
 @app_views.route("/places/<place_id>",  methods=["DELETE"],
