@@ -13,6 +13,7 @@ app.register_blueprint(app_views)
 def teardown(exc):
     storage.close()
 
+
 @app.errorhandler(404)
 def error(exc):
     return({
