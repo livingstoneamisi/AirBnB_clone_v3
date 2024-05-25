@@ -13,6 +13,12 @@ app.register_blueprint(app_views)
 def teardown(exc):
     storage.close()
 
+@app.errorhandler(404)
+def error(exc):
+    return({
+            "error": "Not found"
+            })
+
 
 if __name__ == "__main__":
     from os import getenv
