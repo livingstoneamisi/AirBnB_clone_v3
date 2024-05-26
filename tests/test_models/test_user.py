@@ -8,8 +8,10 @@ import inspect
 import models
 from models import user
 from models.base_model import BaseModel
+from models import storage_t
 import pep8
 import unittest
+from hashlib import md5
 User = user.User
 
 
@@ -78,11 +80,10 @@ class TestUser(unittest.TestCase):
 
     def test_password_attr(self):
         """Test that User has attr password, and it's an empty string"""
-        from hashlib import md5
         user = User()
         self.assertTrue(hasattr(user, "password"))
         if models.storage_t == 'db':
-            self.assertEqual(user.password, None)
+            self.assertEqual(user.password, md5(''.encode()).hexdigest())
         else:
             self.assertEqual(user.password, md5(''.encode()).hexdigest())
 
@@ -107,13 +108,18 @@ class TestUser(unittest.TestCase):
     def test_to_dict_creates_dict(self):
         """test to_dict method creates a dictionary with proper attrs"""
         u = User()
-        new_d = u.to_dict()
+        if storage_t == 'db':
+            save_to_file = True
+        else:
+            save_to_file = False
+        new_d = u.to_dict(save_to_file)
         self.assertEqual(type(new_d), dict)
         self.assertFalse("_sa_instance_state" in new_d)
-        for attr in u.__dict__:
-            if attr is not "_sa_instance_state":
-                self.assertTrue(attr in new_d)
         self.assertTrue("__class__" in new_d)
+        if models.storage_t != 'db':
+            self.assertFalse("password" in new_d)
+        else:
+            self.assertTrue("password" in new_d)
 
     def test_to_dict_values(self):
         """test that values in dict returned from to_dict are correct"""
